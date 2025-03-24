@@ -1,0 +1,140 @@
+{% extends "layoutPizzas.html" %}
+{% from "_macros.html" import render_field %}
+
+{% block content %}
+<div class="bg-gradient-to-br from-gray-100 to-gray-300 min-h-screen py-10">
+    <div class="container mx-auto bg-white shadow-2xl rounded-lg p-10">
+        <h2 class="text-4xl font-bold text-center text-indigo-700 mb-10">Registrar Pedido</h2>
+        
+        <!-- Formulario de registro de cliente -->
+        <form method="POST" class="space-y-8">
+            {{ cliente_form.hidden_tag() }}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-600">Nombre</label>
+                    {{ render_field(cliente_form.nombre, class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 transition", placeholder="Ingresa tu nombre completo") }}
+                </div>
+                <div>
+                    <label for="direccion" class="block text-sm font-medium text-gray-600">Dirección</label>
+                    {{ render_field(cliente_form.direccion, class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 transition", placeholder="Ingresa tu dirección") }}
+                </div>
+                <div>
+                    <label for="telefono" class="block text-sm font-medium text-gray-600">Teléfono</label>
+                    {{ render_field(cliente_form.telefono, class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 transition", placeholder="Ingresa tu número de teléfono") }}
+                </div>
+                <div>
+                    <label for="fecha_pedido" class="block text-sm font-medium text-gray-600">Fecha de Pedido</label>
+                    {{ render_field(cliente_form.fecha_pedido, class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 transition", placeholder="Selecciona la fecha") }}
+                </div>
+            </div>
+            
+            <h3 class="text-2xl font-semibold text-gray-700 mt-10 mb-6">Detalles del Pedido</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <label for="tamaño" class="block text-sm font-medium text-gray-600">Tamaño de la Pizza</label>
+                    {{ render_field(pizza_form.tamaño, class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500 transition") }}
+                </div>
+                <div>
+                    <label for="ingredientes" class="block text-sm font-medium text-gray-600">Ingredientes</label>
+                    {{ render_field(pizza_form.ingredientes, class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500 transition") }}
+                </div>
+                <div>
+                    <label for="cantidad" class="block text-sm font-medium text-gray-600">Cantidad</label>
+                    {{ render_field(pizza_form.cantidad, class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500 transition") }}
+                </div>
+            </div>
+            
+            <button type="submit"
+                class="w-full py-3 bg-gradient-to-r from-green-600 to-green-800 text-white font-bold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition">
+                Agregar Pedido
+            </button>
+        </form>
+
+        <hr class="my-10">
+
+        <!-- Sección de pedidos actuales -->
+        <div class="md:flex md:gap-10">
+            <div class="md:w-3/5">
+                <h3 class="text-3xl font-bold text-gray-800 mb-6">Pedido Actual</h3>
+                <table class="w-full table-auto bg-gray-50 border-collapse border border-gray-200 shadow-md rounded-lg">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="border px-4 py-3 text-left text-gray-700">Tamaño</th>
+                            <th class="border px-4 py-3 text-left text-gray-700">Ingredientes</th>
+                            <th class="border px-4 py-3 text-left text-gray-700">Cantidad</th>
+                            <th class="border px-4 py-3 text-left text-gray-700">Subtotal</th>
+                            <th class="border px-4 py-3 text-center text-gray-700">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pedido in pedidos %}
+                        <tr class="hover:bg-gray-200">
+                            <td class="border px-4 py-3">{{ pedido['tamaño'] }}</td>
+                            <td class="border px-4 py-3">{{ pedido['ingredientes'] }}</td>
+                            <td class="border px-4 py-3">{{ pedido['cantidad'] }}</td>
+                            <td class="border px-4 py-3">${{ pedido['subtotal'] }}</td>
+                            <td class="border px-4 py-3 text-center">
+                                <form method="POST" action="{{ url_for('quitar_pizza', pizza_id=loop.index0) }}">
+                                    <button type="submit"
+                                        class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 hover:shadow transition">
+                                        Quitar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <form method="POST" action="{{ url_for('terminar_pedido') }}" class="mt-6">
+                    <button type="submit"
+                        class="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition">
+                        Terminar Pedido
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Ventas del Día -->
+            <div class="md:w-2/5">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-4">Ventas del Día</h3>
+                    <ul class="space-y-4">
+                        {% for venta in ventas_dia %}
+                        <li class="bg-white p-4 rounded-lg shadow border border-gray-200">
+                            <p><strong>Cliente:</strong> {{ venta[0] }}</p>
+                            <p><strong>Total:</strong> ${{ venta[1] }}</p>
+                            <p><strong>Fecha:</strong> {{ venta[2] }}</p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="mt-4">
+                        <p><strong>Total de Ventas:</strong> ${{ total_ventas }}</p>
+                        <p><strong>Pedidos Realizados:</strong> {{ total_pedidos }}</p>
+                    </div>
+                </div>
+
+                <!-- Consultar Ventas -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md mt-6">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-4">Consultar Ventas</h3>
+                    <form method="POST" action="{{ url_for('consultar_ventas') }}">
+                        {{ consulta_ventas_form.hidden_tag() }}
+                        <div class="space-y-4">
+                            <div>
+                                <label for="periodo" class="text-sm font-medium text-gray-600">Periodo:</label>
+                                {{ render_field(consulta_ventas_form.periodo, class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 transition") }}
+                            </div>
+                            <div>
+                                <label for="fecha" class="text-sm font-medium text-gray-600">Fecha:</label>
+                                {{ render_field(consulta_ventas_form.fecha, class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-indigo-500 transition") }}
+                            </div>
+                        </div>
+                        <button type="submit"
+                            class="w-full py-3 bg-gradient-to-r from-purple-500 to-purple-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition mt-4">
+                            Consultar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

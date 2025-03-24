@@ -1,0 +1,56 @@
+{% extends "layoutPizzas.html" %}
+{% from "_macros.html" import render_field %}
+
+{% block title %}Consultar Ventas{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-br from-gray-100 to-gray-300 min-h-screen py-10 flex justify-center items-center">
+    <div class="w-full max-w-4xl bg-white rounded-lg shadow-2xl p-10">
+        <h2 class="text-4xl font-bold text-center text-indigo-700 mb-8">Consulta de Ventas</h2>
+
+        <!-- Formulario para Consulta -->
+        <form method="POST" id="consultar-ventas-form" class="space-y-6">
+            {{ consulta_ventas_form.hidden_tag() }}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="flex flex-col">
+                    <label for="periodo" class="text-sm font-medium text-gray-600">Periodo:</label>
+                    {{ render_field(consulta_ventas_form.periodo, class="w-full mt-1 p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-lg focus:ring-4 focus:ring-indigo-500 focus:outline-none") }}
+                </div>
+                <div id="fecha-field" class="flex flex-col">
+                    <label for="fecha" class="text-sm font-medium text-gray-600">Fecha:</label>
+                    {{ render_field(consulta_ventas_form.fecha, class="w-full mt-1 p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-lg focus:ring-4 focus:ring-indigo-500 focus:outline-none") }}
+                </div>
+            </div>
+            <button type="submit"
+                class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition">
+                Consultar
+            </button>
+        </form>
+
+        <!-- Resultados de la Consulta -->
+        {% if ventas_dia %}
+        <div class="mt-8">
+            <h3 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Resultados de Ventas</h3>
+            <table class="w-full border-collapse bg-gray-100 rounded-lg shadow-md overflow-hidden">
+                <thead class="bg-gray-300 text-gray-800">
+                    <tr>
+                        <th class="border px-4 py-2 text-left font-medium">Nombre del Cliente</th>
+                        <th class="border px-4 py-2 text-left font-medium">Total de Compra</th>
+                        <th class="border px-4 py-2 text-left font-medium">Fecha del Pedido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ventas_dia %}
+                    <tr class="hover:bg-gray-200 transition-colors">
+                        <td class="border px-4 py-2 text-gray-700">{{ venta[0] }}</td>
+                        <td class="border px-4 py-2 text-gray-700">${{ venta[1] }}</td>
+                        <td class="border px-4 py-2 text-gray-700">{{ venta[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

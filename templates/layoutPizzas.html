@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pizzería{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-tr from-gray-100 via-gray-200 to-gray-300 text-gray-800">
+    <nav class="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-white text-3xl font-bold">Pizzería</h1>
+            <ul class="flex space-x-4">
+                <li><a href="#" class="text-white font-semibold hover:underline">Inicio</a></li>
+                <li><a href="#" class="text-white font-semibold hover:underline">Menú</a></li>
+                <li><a href="#" class="text-white font-semibold hover:underline">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container mx-auto py-10">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    
+</body>
+
+</html>

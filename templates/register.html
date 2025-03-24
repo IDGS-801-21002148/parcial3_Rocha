@@ -1,0 +1,41 @@
+{% extends "layoutReguistro.html" %}
+{% from "_macros.html" import render_field %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-tr from-blue-900 via-gray-800 to-black min-h-screen flex items-center justify-center text-gray-200">
+    <div class="w-full max-w-lg bg-gradient-to-br from-gray-900/80 to-gray-700 p-10 rounded-xl shadow-2xl backdrop-blur-lg">
+        <h2 class="text-4xl font-extrabold text-center text-yellow-400 mb-8">Crea tu Cuenta</h2>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="space-y-4 w-full mb-6">
+            {% for category, message in messages %}
+            <div class="p-4 text-sm rounded bg-red-600 text-white shadow">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="space-y-6 w-full">
+            {{ form.hidden_tag() }}
+
+            <div>
+                {{ render_field(form.username, class="w-full p-3 bg-gray-800 text-gray-300 border border-gray-600 rounded-lg focus:ring-4 focus:ring-yellow-500 focus:outline-none", placeholder="Ingresa tu usuario") }}
+            </div>
+
+            <div>
+                {{ render_field(form.password, class="w-full p-3 bg-gray-800 text-gray-300 border border-gray-600 rounded-lg focus:ring-4 focus:ring-yellow-500 focus:outline-none", placeholder="Ingresa tu contraseña") }}
+            </div>
+
+            <button type="submit"
+                class="w-full py-3 px-6 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-600 text-white font-bold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition">
+                Registrar
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
